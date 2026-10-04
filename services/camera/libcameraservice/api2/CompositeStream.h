@@ -117,7 +117,6 @@ protected:
         void onBufferReleased() override { /*No impl. for now*/ };
         bool needsReleaseNotify() override { return true; };
         void onBuffersDiscarded(const std::vector<sp<GraphicBuffer>>& /*buffers*/) override {};
-        void onBufferDetached(uint64_t /*bufferId*/) override {};
     };
 
     status_t registerCompositeStreamListener(int32_t streamId);

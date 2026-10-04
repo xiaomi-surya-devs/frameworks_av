@@ -978,20 +978,6 @@ private:
         }
     }
 
-    void notifyBufferAttached() {
-        auto p = mBufferChannel.lock();
-        if (p) {
-            p->onBufferAttachedToOutputSurface(mGeneration);
-        }
-    }
-
-    void notifyBufferDetached(uint64_t bufferId) {
-        auto p = mBufferChannel.lock();
-        if (p) {
-            p->onBufferDetachedFromOutputSurface(mGeneration, bufferId);
-        }
-    }
-
     void notifyBuffersRemoved(const std::vector<uint64_t>& bufferIds) {
         auto p = mBufferChannel.lock();
         if (p) {
@@ -1024,24 +1010,7 @@ public:
 #endif
     }
 
-    void onBufferDetached(uint64_t bufferId) override {
-#if COM_ANDROID_GRAPHICS_LIBGUI_FLAGS(WB_MEDIA_MIGRATION)
-        notifyBufferDetached(bufferId);
-#else
-        (void)bufferId;
-        notifyBufferReleased();
-#endif
-    }
-
     bool needsReleaseNotify() override { return true; }
-
-#if COM_ANDROID_GRAPHICS_LIBGUI_FLAGS(BQ_CONSUMER_ATTACH_CALLBACK)
-    void onBufferAttached() override {
-        notifyBufferAttached();
-    }
-
-    bool needsAttachNotify() override { return true; }
-#endif
 };
 
 class BufferCallback : public CodecBase::BufferCallback {
